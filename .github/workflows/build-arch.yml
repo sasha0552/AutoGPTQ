@@ -1,0 +1,32 @@
+name: Build for ArchLinux
+
+on:
+  - workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cleanup system
+        uses: rokibhasansagar/slimhub_actions@main
+        with:
+          retain: "docker_buildkit,docker_imgcache"
+
+      - name: Build package
+        uses: docker://archlinux:latest
+        with:
+          args: |-
+            pacman --sync --refresh --sysupgrade --noconfirm python-pytorch-rocm &&
+            python -m pip install build wheel &&
+            python -m pip install accelerate>=0.19.0 datasets numpy rouge torch>=1.13.0 safetensors transformers>=4.29.0 peft
+            PYTORCH_ROCM_ARCH=gfx803 python -m build --no-isolation --wheel
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: |-
+            dist/*.whl
