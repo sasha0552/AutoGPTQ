@@ -21,8 +21,7 @@ jobs:
         with:
           args: |-
             sh -c "
-              pacman --sync --refresh --sysupgrade --noconfirm python-pytorch-rocm
-              python -m pip install build wheel
+              pacman --sync --refresh --sysupgrade --noconfirm python-pip python-build python-wheel python-pytorch-rocm
               python -m pip install accelerate>=0.19.0 datasets numpy rouge torch>=1.13.0 safetensors transformers>=4.29.0 peft
               PYTORCH_ROCM_ARCH=gfx803 python -m build --no-isolation --wheel
             "
