@@ -21,9 +21,9 @@ jobs:
         with:
           args: |-
             sh -c "
-              pacman --sync --refresh --sysupgrade --noconfirm base-devel python-pip python-build python-wheel python-pytorch-rocm
+              pacman --sync --refresh --sysupgrade --noconfirm base-devel clang ninja python-pip python-build python-wheel python-pytorch-rocm
               python -m pip install accelerate>=0.19.0 datasets numpy rouge torch>=1.13.0 safetensors transformers>=4.29.0 peft
-              PYTORCH_ROCM_ARCH=gfx803 python -m build --no-isolation --wheel
+              PATH=/opt/rocm/bin:$PATH PYTORCH_ROCM_ARCH=gfx803 python -m build --no-isolation --wheel
             "
 
       - name: Upload artifacts
