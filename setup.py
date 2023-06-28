@@ -13,6 +13,7 @@ try:
     TORCH_AVAILABLE = True
     if torch.version.hip:
         extra_compile_args["nvcc"].append("-U__HIP_NO_HALF_CONVERSIONS__")
+        extra_compile_args["nvcc"].append("-U__HIP_NO_HALF_OPERATORS__")
 except ImportError:
     TORCH_AVAILABLE = False
 
